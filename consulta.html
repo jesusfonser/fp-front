@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MedacDent - Consulta cita</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <img src="./images/MedacDent.png">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Pedir cita</a></li>
+                    <li><a href="consulta.html">Consultar citas</a></li>
+                    <!--<li><a>Sobre nosotros</a></li>-->
+                </ul>
+            </nav>
+        </header>
+        <div id="contenido">
+            <h1>Consultar citas</h1>
+            <div id="elh3"></div>
+            <table id="tabla">
+                <colgroup>
+                    <col span="1" style="width:120px;">
+                    <col style="width:170px;">
+                    <col span="4" style="width:120px;">
+                    <col style="width:250px;">
+                </colgroup>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>DNI</th>
+                    <th>Teléfono</th>
+                    <th>Fecha nacimiento</th>
+                    <th>Fecha cita</th>
+                    <th>Observaciones</th>
+                </tr>
+            </table>
+        </div>
+        <footer>
+            <p>Si necesitas más información o tienes alguna duda, ¡ponte en contacto con nosotros!</p>
+            <p>Teléfono: 952 XXX XXX</p>
+            <p>¡Síguenos en redes sociales! - <a href="https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F%3Flocale%3Des_ES">
+                <img class="icono" src="./images/facebook.png">Facebook </a> 
+                <a href="https://www.instagram.com/"><img src="./images/instagram.png" class="icono">Instagram </a> 
+                <a href="https://x.com/"><img src="images/twitter.png" class="icono">X </a></p>
+            <p>&#169;MedacDent - Todos los derechos reservados.</p>
+        </footer>
+        <script>
+
+            let tabla = document.getElementById("tabla");
+            
+            let divh3 = document.getElementById("elh3");
+
+            let inputNombre = document.createElement("input");
+            inputNombre.setAttribute("id","nombre");
+            inputNombre.setAttribute("class", "inputTabla");
+            
+            let inputApellido = document.createElement("input");
+            inputApellido.setAttribute("id", "apellidos");
+            inputApellido.setAttribute("class", "inputTabla");
+            
+            let inputDNI = document.createElement("input");
+            inputDNI.setAttribute("id", "dni");
+            inputDNI.setAttribute("class", "inputTabla");
+            
+            let inputTlf = document.createElement("input");
+            inputTlf.setAttribute("type", "tel");
+            inputTlf.setAttribute("id", "telefono");
+            inputTlf.setAttribute("class", "inputTabla");
+            
+            let inputNacim = document.createElement("input");
+            inputNacim.setAttribute("type", "date");
+            inputNacim.setAttribute("id", "nacimiento");
+            inputNacim.setAttribute("class", "inputTabla");
+
+            let inputCita = document.createElement("input");
+            inputCita.setAttribute("id", "fechacita");
+            inputCita.setAttribute("type", "date");
+            inputCita.setAttribute("class", "inputTabla");
+            
+            let textObserv = document.createElement("textarea");
+            textObserv.setAttribute("id", "observaciones");
+            
+
+            let formularioMini = [inputNombre, inputApellido, inputDNI, inputTlf, inputNacim,
+                inputCita, textObserv];
+
+            function evaluarNombreApellido(a){
+                if (a.value){
+                    a.style.borderColor = "grey";
+                    return a.value;
+                }
+                else{
+                    a.style.borderColor = "red";
+                    return false;
+                }
+            }
+
+            function evaluarDNI(a){
+                let regex = /^\d{8}[a-zA-Z]$/;
+                if (regex.test(a.value)){
+                    a.style.borderColor = "grey";
+                    return a.value;
+                }
+                else{
+                    a.style.borderColor = "red";
+                    return false;
+                }
+                }
+            
+            function evaluarTlf(a){
+                let regex = /^\d{9}$/;
+                if (regex.test(a.value)){
+                    a.style.borderColor = "grey";
+                    return a.value;
+                }
+                else{
+                    a.style.borderColor = "red";
+                    return false;
+                }
+            }
+
+            function evaluarNacimiento(a){
+                let fecha_actual = new Date();
+                let fecha_nacimiento = new Date(a.value);
+                let factor_conversion = 31536000000;
+                let edad = (fecha_actual - fecha_nacimiento)/factor_conversion;
+
+                if (edad > 18){
+                    a.style.borderColor = "grey";
+                    return a.value;
+                }
+
+                else{
+                    a.style.borderColor = "red";
+                    return false;
+                }
+
+            }
+
+            function evaluarCita(a){
+                let fecha_actual = new Date();
+                let fecha_cita = new Date(a.value);
+                let fecha_limite = new Date();
+
+                fecha_limite.setMonth(fecha_actual.getMonth() + 1);
+
+                if (fecha_cita >= fecha_actual && fecha_limite >= fecha_cita){
+                    a.style.borderColor = "grey";
+                    return a.value;
+                }
+
+                else{
+                    a.style.borderColor = "red";
+                    return false;
+                }
+            }
+
+            function evaluarForm(a){
+                let nombre_final = evaluarNombreApellido(inputNombre);
+                let apellido_final = evaluarNombreApellido(inputApellido);
+                let dni_final = evaluarDNI(inputDNI);
+                let tlf_final = evaluarTlf(inputTlf);
+                let nacimiento_final = evaluarNacimiento(inputNacim);
+                let cita_final = evaluarCita(inputCita);
+                let array_datos = [nombre_final, apellido_final, dni_final, tlf_final,
+                    nacimiento_final, cita_final, textObserv.value];
+
+                let div_a = a.parentNode;
+                let fila = div_a.parentNode;
+
+                if (nombre_final && apellido_final && dni_final
+                    && tlf_final && tlf_final && nacimiento_final && cita_final
+                ){
+                    let id_cookie = a.getAttribute("id");
+                    let all_cookies = document.cookie;
+                    let citas = all_cookies.split("; ");
+                    for (let i = 0; i < citas.length; i++){
+                        if (citas[i].includes(id_cookie)){
+                            let la_cookie = citas[i].split("=");
+                            let obj_cita = JSON.parse(decodeURIComponent(la_cookie[1]));
+
+                            obj_cita.nombre = nombre_final;
+                            obj_cita.apellido = apellido_final;
+                            obj_cita.dni = dni_final;
+                            obj_cita.telefono = tlf_final;
+                            obj_cita.nacimiento = nacimiento_final;
+                            obj_cita.cita = cita_final;
+                            obj_cita.observaciones = textObserv.value;
+
+                            if (obj_cita.observaciones === ''){
+                                obj_cita.observaciones = "Sin observaciones.";
+                                array_datos[6] = "Sin observaciones.";
+                            }
+
+                            let cookie_editada = `${id_cookie}=${encodeURIComponent(JSON.stringify(obj_cita))}`;
+                            document.cookie = cookie_editada;
+                            
+                            let all_inputs = document.getElementsByTagName("input");
+                            for (input of all_inputs){
+                                input.remove();
+                            }
+
+                            for (let j = 0; j <= 6; j++){
+                                fila.childNodes[j].textContent = array_datos[j];
+                            }
+
+                            a.setAttribute("class", "edit");
+                            a.textContent = "Editar";
+                            a.setAttribute("onclick", "editarCita(this)");
+
+                            let botones = document.getElementsByClassName("edit");
+                            for (boton of botones){
+                                boton.style.display = "inline-block";
+                            }
+
+                            let botonesElim = document.getElementsByClassName("elim");
+                            for (boton of botonesElim){
+                                boton.style.display = "inline-block";
+                            }
+
+                            break;
+                        }
+                    }
+
+                }
+                
+
+            }
+
+            function editarCita(boton){
+                boton.setAttribute("class", "enviar");
+                let demasBotones = document.getElementsByClassName("edit");
+                let botonesElim = document.getElementsByClassName("elim");
+                for (let i = 0; i < demasBotones.length; i++){
+                    demasBotones[i].style.display = "none";
+                }
+                for (let i = 0; i < botonesElim.length; i++){
+                    botonesElim[i].style.display = "none";
+                }
+                let elDiv = boton.parentNode;
+                let laFila = elDiv.parentNode;
+                let campos = laFila.childNodes;
+                for (let i = 0; i < 7; i++){
+                    campos[i].textContent = '';
+                }
+                boton.setAttribute("onclick", "evaluarForm(this)");
+                boton.textContent = "Enviar"
+                
+                for (let i = 0; i <= 6 ; i++){
+                    campos[i].appendChild(formularioMini[i]);
+                }
+            }
+
+            function openCookie(){
+                let all_cookies = document.cookie;
+                if (all_cookies){
+                    let citas = all_cookies.split("; ");
+                    for (let i = 0; i < citas.length; i++){
+                        let fila = document.createElement("tr")
+                        let cookie_arr = citas[i].split("=");
+                        let datos_cita = JSON.parse(decodeURIComponent(cookie_arr[1]));       
+                        for (key in datos_cita){
+                            let celda = document.createElement("td");
+                            celda.append(datos_cita[key]);
+                            fila.appendChild(celda);
+                        }
+                        let div_botones = document.createElement("div");
+                        div_botones.setAttribute("class", "botones");
+                        let boton_edit = document.createElement("button");
+                        let boton_elim = document.createElement("button");
+                        boton_elim.textContent = "X";
+                        boton_edit.textContent = "Editar";
+                        boton_elim.setAttribute("id", cookie_arr[0]);
+                        boton_edit.setAttribute("id", cookie_arr[0]);
+                        boton_edit.setAttribute("onclick", "editarCita(this)");
+                        boton_elim.setAttribute("onclick", "eliminarCita(this)");
+                        boton_edit.setAttribute("class", "edit");
+                        boton_elim.setAttribute("class", "elim");
+                        div_botones.appendChild(boton_edit);
+                        div_botones.appendChild(boton_elim);
+                        fila.appendChild(div_botones);
+                        tabla.appendChild(fila);
+                    }
+               }
+                if (document.getElementsByTagName("tr").length === 1){
+                    tabla.remove();
+                    let elh3 = document.createElement("h3");
+                    elh3.textContent = "No hay citas registradas"
+                    divh3.appendChild(elh3);
+                }
+            }
+
+
+            function eliminarCita(a){
+                let div_a = a.parentNode;
+                let fila = div_a.parentNode;
+                fila.remove();
+                let id_cookie = a.getAttribute("id");
+                document.cookie = id_cookie + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                if (!document.getElementsByTagName("td").length){
+                    tabla.remove()
+                    let h3texto = document.createElement("h3");
+                    h3texto.textContent = "No hay citas registradas";
+                    divh3.appendChild(h3texto);
+                }
+            }
+
+            openCookie();
+        </script>
+    </body>
+</html>

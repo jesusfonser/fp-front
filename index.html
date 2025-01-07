@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script>
+            let div_aviso = document.createElement("div");
+                
+                function crearAviso(a){
+                    if (a){
+                        if (!document.getElementById("error_gen")){
+                            error_gen = document.createElement("p");
+                            error_gen.setAttribute("id", "error_gen");
+                            error_gen.textContent = "La cita no ha podido registrarse por los siguientes motivos:";
+                            div_aviso.appendChild(error_gen);
+                            let lista_errores = document.createElement("ul");
+                            lista_errores.setAttribute("id", "listaerr");
+                            div_aviso.appendChild(lista_errores);
+                            div_aviso.setAttribute("class", "aviso error");
+                        }
+                        document.getElementById("listaerr").appendChild(a);
+                    }
+                    else{
+                        div_aviso.setAttribute("class", "aviso acierto");
+                        let mensajito = document.createElement("p");
+                        mensajito.textContent = "¡La cita se ha registrado con éxito!";
+                        div_aviso.appendChild(mensajito);
+                    }
+                }
+            
+
+                function evaluarNombreApellido(a){
+                    if (a.value){
+                        a.style.borderColor = "grey";
+                        return a.value;
+                    }
+                    else{
+                        a.style.borderColor = "red";
+                        
+                        if (a.getAttribute("id") === "nombre"){
+                            let errorNombre = document.createElement("li");
+                            errorNombre.textContent = "El nombre introducido no es correcto.";
+                            crearAviso(errorNombre);
+                        }
+                        else{
+                            let errorApellido = document.createElement("li");
+                            errorApellido.textContent = "El apellido introducido no es correcto.";
+                            crearAviso(errorApellido);
+                        }                    
+                        return false;
+                    }
+                }
+
+                function evaluarDNI(a){
+                    let regex = /^\d{8}[a-zA-Z]$/;
+                    if (regex.test(a.value)){
+                        a.style.borderColor = "grey";
+                        return a.value;
+                    }
+                    else{
+                        a.style.borderColor = "red";
+                        let errorDNI = document.createElement("li");
+                        errorDNI.textContent = "El DNI introducido no es correcto."
+                        crearAviso(errorDNI);
+                        return false;
+                    }
+                }
+            
+                function evaluarTlf(a){
+                    let regex = /^\d{9}$/;
+                    if (regex.test(a.value)){
+                        a.style.borderColor = "grey";
+                        return a.value;
+                    }
+                    else{
+                        a.style.borderColor = "red";
+                        let errorTlf = document.createElement("li");
+                        errorTlf.textContent = "El número de teléfono introducido no es correcto."
+                        crearAviso(errorTlf);
+                        return false;
+                    }
+                }
+
+                function evaluarNacimiento(a){
+                    let fecha_actual = new Date();
+                    let fecha_nacimiento = new Date(a.value);
+                    let factor_conversion = 31536000000;
+                    let edad = (fecha_actual - fecha_nacimiento)/factor_conversion;
+
+                    if (edad > 18){
+                        a.style.borderColor = "grey";
+                        return a.value;
+                    }
+
+                    else{
+                        a.style.borderColor = "red";
+                        let errorEdad = document.createElement("li");
+                        errorEdad.textContent = "La fecha de nacimiento introducida no es correcta. El paciente debe ser mayor de edad."
+                        crearAviso(errorEdad);
+                        return false;
+                    }
+
+                }
+
+                function evaluarCita(a){
+                    let fecha_actual = new Date();
+                    let fecha_cita = new Date(a.value);
+                    let fecha_limite_mes = new Date();
+                    let fecha_limite_semana = new Date();
+
+                    fecha_limite_mes.setMonth(fecha_actual.getMonth() + 1);
+                    fecha_limite_semana.setDate(fecha_actual.getDate() + 7);
+                    
+                    if (fecha_cita >= fecha_actual && 
+                    fecha_limite_mes >= fecha_cita &&
+                    fecha_cita >= fecha_limite_semana)
+                    {
+                        a.style.borderColor = "grey";
+                        return a.value;
+                    }
+
+                    else{
+                        a.style.borderColor = "red";
+                        let errorCita = document.createElement("li");
+                        errorCita.textContent = "La fecha para la cita introducida no es correcta. Debe pedirse con una semana de antelación mínima, máxima de un mes."
+                        crearAviso(errorCita);
+                        return false;
+                    }
+                }
+            
+                function evaluarForm(){
+                    if(document.getElementsByClassName("aviso").length){
+                        for (let i = 0; i < document.getElementsByClassName("aviso").length; i++){
+                            document.getElementsByClassName("aviso")[i].innerHTML = '';
+                            document.getElementsByClassName("aviso")[i].setAttribute("class", "aviso");
+                            document.getElementsByClassName("aviso")[i].remove();
+                        }                    
+                    }
+
+                
+                    let div_padre = document.getElementById("contenido");
+                    div_padre.appendChild(div_aviso);
+                        
+                    let inNombre = document.getElementById("nombre");
+                    let inApellido = document.getElementById("apellidos");
+                    let inDNI = document.getElementById("dni");
+                    let inTelefono = document.getElementById("telefono");
+                    let inNacimiento = document.getElementById("nacimiento");
+                    let inFechaCita = document.getElementById("fechacita");
+                    let inObservaciones = document.getElementById("observaciones");
+
+                    let nombre_final = evaluarNombreApellido(inNombre);
+                    let apellido_final = evaluarNombreApellido(inApellido);
+                    let dni_final = evaluarDNI(inDNI);
+                    let tlf_final = evaluarTlf(inTelefono);
+                    let nacimiento_final = evaluarNacimiento(inNacimiento);
+                    let cita_final = evaluarCita(inFechaCita);
+                    
+                    let array_final = [nombre_final, apellido_final, dni_final, tlf_final,
+                        nacimiento_final, cita_final];
+
+                    if (nombre_final && apellido_final && dni_final
+                        && tlf_final && tlf_final && nacimiento_final && cita_final
+                    ){
+                        let id = new Date ();
+                        let cita = {
+                            nombre: nombre_final,
+                            apellido: apellido_final,
+                            dni: dni_final,
+                            telefono: tlf_final,
+                            nacimiento: nacimiento_final,
+                            cita: cita_final,
+                            observaciones: inObservaciones.value
+                        }
+
+                        if (cita.observaciones === ''){
+                            cita.observaciones = "Sin observaciones.";
+                        }
+
+                        document.cookie = `${id}=${encodeURIComponent(JSON.stringify(cita))}`
+                        crearAviso(false);
+
+                    }
+                    
+
+            }
+        </script>
+    </head>
+
+    <body>
+        <header>
+            <img src="./images/MedacDent.png">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Pedir cita</a></li>
+                    <li><a href="consulta.html">Consultar citas</a></li>
+                    <!--<li><a>Sobre nosotros</a></li>-->
+                </ul>
+            </nav>
+        </header>
+    <div id="contenido">
+        <h1>Pedir cita</h1>
+        <form>
+            <fieldset>
+                <legend>Datos personales</legend>
+                <ul>
+                    <label for="nombre">Nombre: </label>
+                    <input id="nombre">
+                    <label for="apellidos">Apellidos: </label>
+                    <input id="apellidos">
+                    <label for="dni">DNI: </label>
+                    <input id="dni">
+                </ul>
+                <ul>
+                    <label for="telefono">Número de teléfono: </label>
+                    <input type="tel" id="telefono">
+                    <label for="nacimiento">Fecha de nacimiento: </label>
+                    <input type="date" id="nacimiento">
+                </ul>
+            </fieldset>
+            </form>
+            <form>
+            <fieldset id="field2">
+                <legend>Datos de la cita</legend>
+                <label for="fechacita">Fecha de la cita: </label>
+                <input type="date" id="fechacita">
+                <label for="observaciones">Observaciones: </label>
+                <textarea id="observaciones"></textarea>
+            </fieldset>
+        </form>
+
+        <button class="evalua" onclick="evaluarForm()">Enviar</button>
+    </div>
+    <footer>
+        <p>Si necesitas más información o tienes alguna duda, ¡ponte en contacto con nosotros!</p>
+        <p>Teléfono: 952 XXX XXX</p>
+        <p>¡Síguenos en redes sociales! - <a href="https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F%3Flocale%3Des_ES">
+            <img class="icono" src="./images/facebook.png">Facebook </a> 
+            <a href="https://www.instagram.com/"><img src="./images/instagram.png" class="icono">Instagram </a> 
+            <a href="https://x.com/"><img src="images/twitter.png" class="icono">X </a></p>
+        <p>&#169;MedacDent - Todos los derechos reservados.</p>
+    </footer>
+    </body>
+</html>

@@ -1,0 +1,241 @@
+@font-face {
+    font-family: 'quicksandregular';
+    src: url('./fonts/quicksand-regular-webfont.woff2') format('woff2'),
+         url('./fonts/quicksand-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#contenido{
+    margin: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 400px;
+}
+
+table{
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 950px;
+}
+
+td{
+    font-size: 0.9rem;
+    background-color: lightblue;
+    padding: 10px;
+    border-width: 1px;
+    border-color: rgb(113, 144, 153);
+    border-style: solid;
+    text-align: center;
+    overflow: auto;
+}
+
+.edit, .elim, .enviar{
+    font-family: 'quicksandregular';
+    color: white;
+    font-size: 0.9rem;
+    border-style: none;
+    font-weight: bold;
+    margin: 1px;
+}
+
+.edit{
+    background-color: darkblue;
+}
+
+.elim{
+    background-color: red;
+}
+
+.enviar{
+    background-color: green;
+}
+
+.icono{
+    width: 15px;
+}
+
+.inputTabla{
+    background-color: lightblue;
+    width: 80px;
+}
+
+footer{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: grey;
+    max-width: 100vw;
+    padding: 10px;
+    color: white;
+}
+
+footer > p{
+    font-size: 0.8rem;
+}
+
+textarea{
+    height: 150px;
+    width: 60%;
+}
+
+button[class="evalua"]{
+    background-color: darkblue;
+    color: white;
+    font-family: "quicksandregular";
+    border-style: none;
+    font-weight: bold;
+    font-size: 1.05rem;
+    padding: 8px;
+    width: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+button[class="evalua"]:hover{
+    cursor: pointer;
+    background-color: rgb(17, 17, 156);
+}
+
+button[class="evalua"]:active{
+    background-color: rgb(0, 0, 77);
+}
+
+#field2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+legend{
+    font-family: "quicksandregular";
+    font-weight: bold;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+fieldset{
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+}
+
+fieldset ul{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+input{
+    width: 200px;
+    height: 20px;
+    padding: 5px;
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: grey;
+    margin-bottom: 10px;
+}
+
+td > textarea{
+    height: 30px;
+    width: 180px;
+}
+
+td > input{
+    width: 110px;
+}
+
+input:focus{
+    outline: 0px;
+}
+
+h1{
+    font-family: "quicksandregular";
+    color: darkblue;
+}
+
+body{
+    margin: 0;
+}
+
+nav{
+    background-color: darkblue;
+}
+
+ul{
+    display: flex;
+    margin: 0;
+    justify-content: flex-start;
+    padding: 0;
+}
+
+img{
+    margin: 0;
+}
+
+li > a{
+    display: block;
+    font-family: "quicksandregular";
+    font-weight: bold;
+    font-size: 1.1rem;
+    background-color: darkblue;
+    color: white;
+    padding: 10px;
+    width: 150px;
+    text-align: center;
+    text-decoration: none;
+}
+
+li > a:hover{
+    background-color: rgb(0, 0, 126);
+    cursor: pointer;
+}
+
+li{
+    list-style-type: none;
+}
+
+.aviso{
+    padding: 40px;
+    width: 80%;
+    border-width: 15px;
+    border-style: solid;
+}
+
+.aviso > ul{
+    display: block;
+}
+
+.aviso li{
+    list-style-type: disc;
+}
+
+.aviso.error{
+    background-color: rgb(161, 117, 117);
+    border-color: rgb(163, 57, 57);
+}
+
+.botones{
+    display: flex;
+    align-items: center;
+    height: 37px;
+}
+
+.aviso.acierto{
+    background-color: rgb(94, 139, 94);
+    border-color: rgb(12, 139, 12);
+}
